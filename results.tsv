@@ -8,3 +8,4 @@ timestamp	commit	baseline_s_per_lead	new_s_per_lead	delta_pct	status	description
 2026-03-22T08:30:21Z	bff6c3e	14.639	11.383	-22.2%	keep	changed ['leadgen/pipeline.py']
 2026-03-22T08:36:00Z	d9e1331	7.525	N/A	N/A	skip	Claude error: Extra data: line 1 column 14082 (char 14081)
 2026-03-22T08:40:22Z	1b20bb3	10.849	N/A	N/A	skip	syntax error: invalid syntax (<unknown>, line 2)
+2026-03-22T09:03:49Z	5401b5e	2.870	N/A	N/A	skip	Claude error: Expecting ',' delimiter: line 1 column 49 (char 48)

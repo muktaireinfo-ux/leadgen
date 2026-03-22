@@ -35,6 +35,7 @@ jobs:
 
       - name: Run optimizer
         env:
+          PYTHONPATH: .
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}   # used by optimizer to call Claude
           GOOGLE_SHEET_ID: ${{ secrets.GOOGLE_SHEET_ID }}
           GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}

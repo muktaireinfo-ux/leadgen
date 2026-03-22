@@ -88,3 +88,168 @@ def append_results(
             f"{timestamp}\t{commit}\t{baseline:.3f}\t"
             f"{new_str}\t{delta}\t{status}\t{description}\n"
         )
+
+
+# ── source file reader ───────────────────────────────────────────────────────
+
+def get_source_files() -> dict[str, str]:
+    """Return all Python files under leadgen/ as {relative_path: content}."""
+    files = {}
+    for path in sorted(LEADGEN_DIR.rglob("*.py")):
+        rel = str(path.relative_to(REPO_ROOT))
+        files[rel] = path.read_text()
+    return files
+
+
+# ── Claude integration ───────────────────────────────────────────────────────
+
+def call_claude(baseline: float, source_files: dict) -> list[dict]:
+    """Ask Claude for one targeted improvement. Returns list of {file, content}."""
+    import anthropic
+
+    files_text = "\n\n".join(
+        f"=== {path} ===\n{content}" for path, content in source_files.items()
+    )
+
+    prompt = f"""You are optimizing a Python lead generation pipeline for speed (seconds per lead).
+Current performance: {baseline:.3f} seconds/lead.
+
+Your task: suggest ONE code change that would make lead generation faster.
+Focus on: concurrency, I/O parallelism, caching, reduced API round-trips,
+eliminated sleep delays, connection reuse, or faster data structures.
+
+STRICT RULES:
+- Only return files under leadgen/ (e.g. "leadgen/pipeline.py")
+- Do NOT touch: API key loading, credential files, config.py env reads,
+  service_account.json handling, or the benchmark parameters
+- Do NOT remove deduplication logic
+- Do NOT break the Google Sheets write
+
+Return ONLY a JSON array (no markdown, no explanation) of objects:
+[{{"file": "leadgen/pipeline.py", "content": "<full new file content>"}}]
+
+Current source files:
+{files_text}"""
+
+    client = anthropic.Anthropic()
+    message = client.messages.create(
+        model="claude-opus-4-6",
+        max_tokens=8192,
+        messages=[{"role": "user", "content": prompt}],
+    )
+
+    text = message.content[0].text.strip()
+    # Strip markdown code fences if present
+    if text.startswith("```"):
+        text = text.split("\n", 1)[1]
+        text = text.rsplit("```", 1)[0]
+
+    start = text.find("[")
+    end = text.rfind("]") + 1
+    return json.loads(text[start:end])
+
+
+# ── git helpers ──────────────────────────────────────────────────────────────
+
+def get_short_commit(repo_root: Path = REPO_ROOT) -> str:
+    result = subprocess.run(
+        ["git", "rev-parse", "--short", "HEAD"],
+        cwd=repo_root, capture_output=True, text=True, check=True,
+    )
+    return result.stdout.strip()
+
+
+def commit_and_push(
+    changes: list[dict], baseline: float, new_metric: float,
+    repo_root: Path = REPO_ROOT,
+) -> None:
+    """Stage changed files + results.tsv, commit, and push."""
+    files = [change["file"] for change in changes] + ["results.tsv"]
+    subprocess.run(["git", "add"] + files, cwd=repo_root, check=True)
+    delta_pct = (new_metric - baseline) / baseline * 100
+    msg = f"autoopt: {new_metric:.3f}s/lead ({delta_pct:+.1f}%)"
+    subprocess.run(["git", "commit", "-m", msg], cwd=repo_root, check=True)
+    subprocess.run(["git", "push"], cwd=repo_root, check=True)
+
+
+def push_results_only(repo_root: Path = REPO_ROOT) -> None:
+    """Commit and push results.tsv alone (revert runs)."""
+    subprocess.run(["git", "add", "results.tsv"], cwd=repo_root, check=True)
+    subprocess.run(
+        ["git", "commit", "-m", "autoopt: log experiment (no improvement)"],
+        cwd=repo_root, check=True,
+    )
+    subprocess.run(["git", "push"], cwd=repo_root, check=True)
+
+
+# ── main loop ────────────────────────────────────────────────────────────────
+
+def main() -> None:
+    from autoopt.benchmark import run_benchmark
+
+    print("=" * 60)
+    print("Lead Gen Auto-Optimizer")
+    print("=" * 60)
+
+    # 1. Baseline
+    print("\n[1/5] Running baseline benchmark...")
+    try:
+        baseline = run_benchmark()
+    except Exception as e:
+        print(f"Baseline benchmark failed: {e}")
+        return
+    print(f"      Baseline: {baseline:.3f}s/lead")
+
+    # 2. Get suggestion
+    print("\n[2/5] Asking Claude for an improvement...")
+    source_files = get_source_files()
+    try:
+        changes = call_claude(baseline, source_files)
+    except Exception as e:
+        print(f"Claude call failed: {e}")
+        return
+    print(f"      Claude suggested changes to: {[c['file'] for c in changes]}")
+
+    # 3. Validate paths
+    print("\n[3/5] Validating file paths...")
+    if not validate_paths(changes):
+        print("ERROR: Claude returned paths outside leadgen/. Aborting.")
+        commit = get_short_commit()
+        append_results(REPO_ROOT, commit, baseline, None, "skip", "invalid paths from Claude")
+        push_results_only()
+        return
+
+    # 4. Apply + benchmark
+    print("\n[4/5] Applying changes and re-benchmarking...")
+    apply_changes(changes)
+    try:
+        new_metric = run_benchmark()
+    except Exception as e:
+        print(f"Benchmark after changes failed: {e}")
+        revert_changes()
+        commit = get_short_commit()
+        append_results(REPO_ROOT, commit, baseline, None, "revert", f"crash: {e}")
+        push_results_only()
+        return
+
+    delta_pct = (new_metric - baseline) / baseline * 100
+    print(f"      New metric: {new_metric:.3f}s/lead ({delta_pct:+.1f}%)")
+
+    # 5. Keep or revert
+    commit = get_short_commit()
+    if new_metric < baseline * 0.99:
+        print("\n[5/5] Improved! Committing and pushing...")
+        description = f"changed {[c['file'] for c in changes]}"
+        append_results(REPO_ROOT, commit, baseline, new_metric, "keep", description)
+        commit_and_push(changes, baseline, new_metric)
+        print("      Done. Improvement committed.")
+    else:
+        print("\n[5/5] No improvement. Reverting...")
+        revert_changes()
+        append_results(REPO_ROOT, commit, baseline, new_metric, "revert", "no improvement")
+        push_results_only()
+        print("      Done. Changes reverted.")
+
+
+if __name__ == "__main__":
+    main()

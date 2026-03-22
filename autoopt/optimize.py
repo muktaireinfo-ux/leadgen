@@ -93,9 +93,15 @@ def append_results(
 # ── source file reader ───────────────────────────────────────────────────────
 
 def get_source_files() -> dict[str, str]:
-    """Return all Python files under leadgen/ as {relative_path: content}."""
+    """Return optimizable Python files under leadgen/ as {relative_path: content}.
+
+    Excludes scrapers/ — they wrap external APIs so there's nothing to optimize.
+    This also keeps the prompt within Groq's free-tier token limit.
+    """
     files = {}
     for path in sorted(LEADGEN_DIR.rglob("*.py")):
+        if "scrapers" in path.parts:
+            continue
         rel = str(path.relative_to(REPO_ROOT))
         files[rel] = path.read_text()
     return files

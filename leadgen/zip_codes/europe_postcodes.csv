@@ -1,0 +1,257 @@
+postcode,city,country_code,country_name
+E1,London,uk,United Kingdom
+E2,London,uk,United Kingdom
+E3,London,uk,United Kingdom
+E14,London,uk,United Kingdom
+EC1A,London,uk,United Kingdom
+EC2A,London,uk,United Kingdom
+EC3A,London,uk,United Kingdom
+N1,London,uk,United Kingdom
+N7,London,uk,United Kingdom
+NW1,London,uk,United Kingdom
+NW3,London,uk,United Kingdom
+NW6,London,uk,United Kingdom
+SE1,London,uk,United Kingdom
+SE5,London,uk,United Kingdom
+SE10,London,uk,United Kingdom
+SE15,London,uk,United Kingdom
+SW1A,London,uk,United Kingdom
+SW3,London,uk,United Kingdom
+SW6,London,uk,United Kingdom
+SW10,London,uk,United Kingdom
+W1A,London,uk,United Kingdom
+W1B,London,uk,United Kingdom
+W1C,London,uk,United Kingdom
+W1D,London,uk,United Kingdom
+W2,London,uk,United Kingdom
+W6,London,uk,United Kingdom
+W8,London,uk,United Kingdom
+WC1A,London,uk,United Kingdom
+WC2A,London,uk,United Kingdom
+M1,Manchester,uk,United Kingdom
+M2,Manchester,uk,United Kingdom
+M3,Manchester,uk,United Kingdom
+M4,Manchester,uk,United Kingdom
+M12,Manchester,uk,United Kingdom
+M13,Manchester,uk,United Kingdom
+M14,Manchester,uk,United Kingdom
+M15,Manchester,uk,United Kingdom
+M16,Manchester,uk,United Kingdom
+B1,Birmingham,uk,United Kingdom
+B2,Birmingham,uk,United Kingdom
+B3,Birmingham,uk,United Kingdom
+B4,Birmingham,uk,United Kingdom
+B5,Birmingham,uk,United Kingdom
+B6,Birmingham,uk,United Kingdom
+B7,Birmingham,uk,United Kingdom
+B8,Birmingham,uk,United Kingdom
+B9,Birmingham,uk,United Kingdom
+B10,Birmingham,uk,United Kingdom
+LS1,Leeds,uk,United Kingdom
+LS2,Leeds,uk,United Kingdom
+LS3,Leeds,uk,United Kingdom
+LS6,Leeds,uk,United Kingdom
+LS7,Leeds,uk,United Kingdom
+LS8,Leeds,uk,United Kingdom
+BS1,Bristol,uk,United Kingdom
+BS2,Bristol,uk,United Kingdom
+BS3,Bristol,uk,United Kingdom
+BS5,Bristol,uk,United Kingdom
+BS6,Bristol,uk,United Kingdom
+G1,Glasgow,uk,United Kingdom
+G2,Glasgow,uk,United Kingdom
+G3,Glasgow,uk,United Kingdom
+G4,Glasgow,uk,United Kingdom
+G5,Glasgow,uk,United Kingdom
+EH1,Edinburgh,uk,United Kingdom
+EH2,Edinburgh,uk,United Kingdom
+EH3,Edinburgh,uk,United Kingdom
+EH6,Edinburgh,uk,United Kingdom
+10115,Berlin,de,Germany
+10117,Berlin,de,Germany
+10119,Berlin,de,Germany
+10178,Berlin,de,Germany
+10179,Berlin,de,Germany
+10243,Berlin,de,Germany
+10245,Berlin,de,Germany
+10247,Berlin,de,Germany
+10249,Berlin,de,Germany
+10315,Berlin,de,Germany
+10317,Berlin,de,Germany
+10318,Berlin,de,Germany
+10319,Berlin,de,Germany
+10365,Berlin,de,Germany
+10367,Berlin,de,Germany
+10369,Berlin,de,Germany
+10405,Berlin,de,Germany
+10407,Berlin,de,Germany
+10409,Berlin,de,Germany
+10435,Berlin,de,Germany
+10437,Berlin,de,Germany
+10439,Berlin,de,Germany
+10585,Berlin,de,Germany
+10587,Berlin,de,Germany
+10589,Berlin,de,Germany
+10623,Berlin,de,Germany
+10625,Berlin,de,Germany
+10627,Berlin,de,Germany
+10629,Berlin,de,Germany
+20095,Hamburg,de,Germany
+20097,Hamburg,de,Germany
+20099,Hamburg,de,Germany
+20144,Hamburg,de,Germany
+20146,Hamburg,de,Germany
+20148,Hamburg,de,Germany
+20149,Hamburg,de,Germany
+20251,Hamburg,de,Germany
+20253,Hamburg,de,Germany
+20255,Hamburg,de,Germany
+20257,Hamburg,de,Germany
+20259,Hamburg,de,Germany
+80331,München,de,Germany
+80333,München,de,Germany
+80335,München,de,Germany
+80336,München,de,Germany
+80337,München,de,Germany
+80339,München,de,Germany
+80469,München,de,Germany
+80538,München,de,Germany
+80539,München,de,Germany
+80636,München,de,Germany
+80637,München,de,Germany
+80638,München,de,Germany
+50667,Köln,de,Germany
+50668,Köln,de,Germany
+50670,Köln,de,Germany
+50672,Köln,de,Germany
+50674,Köln,de,Germany
+50676,Köln,de,Germany
+50677,Köln,de,Germany
+50678,Köln,de,Germany
+50679,Köln,de,Germany
+60306,Frankfurt,de,Germany
+60308,Frankfurt,de,Germany
+60310,Frankfurt,de,Germany
+60311,Frankfurt,de,Germany
+60313,Frankfurt,de,Germany
+60314,Frankfurt,de,Germany
+60316,Frankfurt,de,Germany
+60318,Frankfurt,de,Germany
+60320,Frankfurt,de,Germany
+75001,Paris,fr,France
+75002,Paris,fr,France
+75003,Paris,fr,France
+75004,Paris,fr,France
+75005,Paris,fr,France
+75006,Paris,fr,France
+75007,Paris,fr,France
+75008,Paris,fr,France
+75009,Paris,fr,France
+75010,Paris,fr,France
+75011,Paris,fr,France
+75012,Paris,fr,France
+75013,Paris,fr,France
+75014,Paris,fr,France
+75015,Paris,fr,France
+75016,Paris,fr,France
+75017,Paris,fr,France
+75018,Paris,fr,France
+75019,Paris,fr,France
+75020,Paris,fr,France
+69001,Lyon,fr,France
+69002,Lyon,fr,France
+69003,Lyon,fr,France
+69004,Lyon,fr,France
+69005,Lyon,fr,France
+69006,Lyon,fr,France
+69007,Lyon,fr,France
+69008,Lyon,fr,France
+69009,Lyon,fr,France
+13001,Marseille,fr,France
+13002,Marseille,fr,France
+13003,Marseille,fr,France
+13004,Marseille,fr,France
+13005,Marseille,fr,France
+13006,Marseille,fr,France
+13007,Marseille,fr,France
+13008,Marseille,fr,France
+13009,Marseille,fr,France
+31000,Toulouse,fr,France
+31100,Toulouse,fr,France
+31200,Toulouse,fr,France
+31300,Toulouse,fr,France
+31400,Toulouse,fr,France
+31500,Toulouse,fr,France
+1011,Amsterdam,nl,Netherlands
+1012,Amsterdam,nl,Netherlands
+1013,Amsterdam,nl,Netherlands
+1014,Amsterdam,nl,Netherlands
+1015,Amsterdam,nl,Netherlands
+1016,Amsterdam,nl,Netherlands
+1017,Amsterdam,nl,Netherlands
+1018,Amsterdam,nl,Netherlands
+1019,Amsterdam,nl,Netherlands
+1054,Amsterdam,nl,Netherlands
+1055,Amsterdam,nl,Netherlands
+1056,Amsterdam,nl,Netherlands
+1057,Amsterdam,nl,Netherlands
+1058,Amsterdam,nl,Netherlands
+3011,Rotterdam,nl,Netherlands
+3012,Rotterdam,nl,Netherlands
+3013,Rotterdam,nl,Netherlands
+3014,Rotterdam,nl,Netherlands
+3015,Rotterdam,nl,Netherlands
+3016,Rotterdam,nl,Netherlands
+3021,Rotterdam,nl,Netherlands
+3022,Rotterdam,nl,Netherlands
+2511,Den Haag,nl,Netherlands
+2512,Den Haag,nl,Netherlands
+2513,Den Haag,nl,Netherlands
+2514,Den Haag,nl,Netherlands
+2515,Den Haag,nl,Netherlands
+2516,Den Haag,nl,Netherlands
+28001,Madrid,es,Spain
+28002,Madrid,es,Spain
+28003,Madrid,es,Spain
+28004,Madrid,es,Spain
+28005,Madrid,es,Spain
+28006,Madrid,es,Spain
+28007,Madrid,es,Spain
+28008,Madrid,es,Spain
+28009,Madrid,es,Spain
+28010,Madrid,es,Spain
+28011,Madrid,es,Spain
+28012,Madrid,es,Spain
+28013,Madrid,es,Spain
+28014,Madrid,es,Spain
+28015,Madrid,es,Spain
+28016,Madrid,es,Spain
+28017,Madrid,es,Spain
+28018,Madrid,es,Spain
+08001,Barcelona,es,Spain
+08002,Barcelona,es,Spain
+08003,Barcelona,es,Spain
+08004,Barcelona,es,Spain
+08005,Barcelona,es,Spain
+08006,Barcelona,es,Spain
+08007,Barcelona,es,Spain
+08008,Barcelona,es,Spain
+08009,Barcelona,es,Spain
+08010,Barcelona,es,Spain
+08011,Barcelona,es,Spain
+08012,Barcelona,es,Spain
+08013,Barcelona,es,Spain
+08014,Barcelona,es,Spain
+08015,Barcelona,es,Spain
+46001,Valencia,es,Spain
+46002,Valencia,es,Spain
+46003,Valencia,es,Spain
+46004,Valencia,es,Spain
+46005,Valencia,es,Spain
+46006,Valencia,es,Spain
+46007,Valencia,es,Spain
+41001,Sevilla,es,Spain
+41002,Sevilla,es,Spain
+41003,Sevilla,es,Spain
+41004,Sevilla,es,Spain
+41005,Sevilla,es,Spain

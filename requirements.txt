@@ -1,0 +1,16 @@
+anthropic>=0.40.0
+outscraper>=3.0.0
+requests>=2.31.0
+beautifulsoup4>=4.12.0
+google-auth>=2.27.0
+google-auth-oauthlib>=1.2.0
+google-auth-httplib2>=0.2.0
+google-api-python-client>=2.120.0
+python-dotenv>=1.0.0
+lxml>=5.1.0
+# Instagram scraping (Apify)
+apify-client>=1.7.0
+# Google Maps scraping without API key (local browser, optional)
+botasaurus>=3.1.0
+# Yahoo search enrichment (no API key needed, works with system Python TLS)
+# No extra package needed — uses requests + beautifulsoup4 (already listed above)

@@ -163,7 +163,36 @@ Current source files:
 
     start = text.find("[")
     end = text.rfind("]") + 1
-    return json.loads(text[start:end])
+    raw = text[start:end]
+
+    # LLMs sometimes emit literal control characters inside JSON strings
+    # (e.g. real newlines instead of \n). Fix them with a lightweight
+    # state-machine that only escapes chars that are inside string values.
+    fixed = _fix_json_control_chars(raw)
+    return json.loads(fixed)
+
+
+def _fix_json_control_chars(s: str) -> str:
+    """Escape unescaped control characters that appear inside JSON strings."""
+    _ESC = {"\n": "\\n", "\r": "\\r", "\t": "\\t"}
+    result = []
+    in_string = False
+    escaped = False
+    for ch in s:
+        if escaped:
+            result.append(ch)
+            escaped = False
+        elif ch == "\\":
+            result.append(ch)
+            escaped = True
+        elif ch == '"':
+            result.append(ch)
+            in_string = not in_string
+        elif in_string and ord(ch) < 0x20:
+            result.append(_ESC.get(ch, " "))
+        else:
+            result.append(ch)
+    return "".join(result)
 
 
 # ── git helpers ──────────────────────────────────────────────────────────────

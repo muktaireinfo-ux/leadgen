@@ -95,12 +95,19 @@ def append_results(
 def get_source_files() -> dict[str, str]:
     """Return optimizable Python files under leadgen/ as {relative_path: content}.
 
-    Excludes scrapers/ — they wrap external APIs so there's nothing to optimize.
-    This also keeps the prompt within Groq's free-tier token limit.
+    Excludes files with nothing to optimize:
+    - scrapers/   : external API wrappers, latency is network-bound
+    - config.py   : env var loading only
+    - writer.py   : Google Sheets API calls, latency is network-bound
+    - __init__.py : empty package markers
+
+    Keeping only the files that have real optimization potential also keeps
+    the prompt within Groq's free-tier TPM limit.
     """
+    _SKIP_NAMES = {"config.py", "writer.py", "__init__.py"}
     files = {}
     for path in sorted(LEADGEN_DIR.rglob("*.py")):
-        if "scrapers" in path.parts:
+        if "scrapers" in path.parts or path.name in _SKIP_NAMES:
             continue
         rel = str(path.relative_to(REPO_ROOT))
         files[rel] = path.read_text()
@@ -139,11 +146,11 @@ Current source files:
 {files_text}"""
 
     client = OpenAI(
-        base_url="https://generativelanguage.googleapis.com/v1beta/openai/",
-        api_key=os.environ["GEMINI_API_KEY"],
+        base_url="https://api.groq.com/openai/v1",
+        api_key=os.environ["GROQ_API_KEY"],
     )
     message = client.chat.completions.create(
-        model="gemini-2.0-flash",
+        model="llama-3.3-70b-versatile",
         max_tokens=8192,
         messages=[{"role": "user", "content": prompt}],
     )

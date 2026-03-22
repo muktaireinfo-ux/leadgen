@@ -291,7 +291,14 @@ def main() -> None:
 
     # 4. Apply + benchmark
     print("\n[4/5] Applying changes and re-benchmarking...")
-    apply_changes(changes)
+    try:
+        apply_changes(changes)
+    except SyntaxError as e:
+        print(f"LLM change has invalid Python syntax: {e}. Skipping.")
+        commit = get_short_commit()
+        append_results(REPO_ROOT, commit, baseline, None, "skip", f"syntax error: {e}")
+        push_results_only()
+        return
     try:
         new_metric = run_benchmark()
     except Exception as e:

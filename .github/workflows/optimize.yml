@@ -39,7 +39,7 @@ jobs:
       - name: Run optimizer
         env:
           PYTHONPATH: .
-          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}   # used by optimizer to call Groq (free LLM)
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}   # used by optimizer to call Gemini (free LLM)
           GOOGLE_SHEET_ID: ${{ secrets.GOOGLE_SHEET_ID }}
           APIFY_API_KEY: ${{ secrets.APIFY_API_KEY }}
           # service_account.json written to repo root by the step above — no env var needed

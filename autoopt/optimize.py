@@ -139,11 +139,11 @@ Current source files:
 {files_text}"""
 
     client = OpenAI(
-        base_url="https://api.groq.com/openai/v1",
-        api_key=os.environ["GROQ_API_KEY"],
+        base_url="https://generativelanguage.googleapis.com/v1beta/openai/",
+        api_key=os.environ["GEMINI_API_KEY"],
     )
     message = client.chat.completions.create(
-        model="llama-3.1-8b-instant",
+        model="gemini-2.0-flash",
         max_tokens=8192,
         messages=[{"role": "user", "content": prompt}],
     )

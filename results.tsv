@@ -14,3 +14,4 @@ timestamp	commit	baseline_s_per_lead	new_s_per_lead	delta_pct	status	description
 2026-03-22T15:52:02Z	44fe184	7.626	N/A	N/A	skip	Claude error: Invalid \escape: line 1 column 121 (char 120)
 2026-03-22T16:59:39Z	b73449a	2.939	2.604	-11.4%	keep	changed ['leadgen/pipeline.py']
 2026-03-22T20:41:13Z	1c903ac	4.087	N/A	N/A	skip	invalid change: expected an indented block after function definition on line 33 (<unknown>, line 36)
+2026-03-22T20:56:42Z	df93e84	7.647	N/A	N/A	skip	invalid change: leadgen/pipeline.py is missing required top-level names: ['run']. LLM likely used placeholder comments instead of full file content.

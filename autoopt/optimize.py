@@ -133,11 +133,11 @@ Current source files:
 {files_text}"""
 
     client = OpenAI(
-        base_url="https://models.inference.ai.azure.com",
-        api_key=os.environ["GITHUB_TOKEN"],
+        base_url="https://api.groq.com/openai/v1",
+        api_key=os.environ["GROQ_API_KEY"],
     )
     message = client.chat.completions.create(
-        model="gpt-4o",
+        model="llama-3.3-70b-versatile",
         max_tokens=8192,
         messages=[{"role": "user", "content": prompt}],
     )

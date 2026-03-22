@@ -39,7 +39,7 @@ jobs:
       - name: Run optimizer
         env:
           PYTHONPATH: .
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}   # used by optimizer to call Claude
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}   # used by optimizer to call GitHub Models (free LLM)
           GOOGLE_SHEET_ID: ${{ secrets.GOOGLE_SHEET_ID }}
           APIFY_API_KEY: ${{ secrets.APIFY_API_KEY }}
           # service_account.json written to repo root by the step above — no env var needed

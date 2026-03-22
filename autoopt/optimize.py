@@ -104,8 +104,9 @@ def get_source_files() -> dict[str, str]:
 # ── Claude integration ───────────────────────────────────────────────────────
 
 def call_claude(baseline: float, source_files: dict) -> list[dict]:
-    """Ask Claude for one targeted improvement. Returns list of {file, content}."""
-    import anthropic
+    """Ask an LLM for one targeted improvement. Returns list of {file, content}."""
+    import os
+    from openai import OpenAI
 
     files_text = "\n\n".join(
         f"=== {path} ===\n{content}" for path, content in source_files.items()
@@ -131,14 +132,17 @@ Return ONLY a JSON array (no markdown, no explanation) of objects:
 Current source files:
 {files_text}"""
 
-    client = anthropic.Anthropic()
-    message = client.messages.create(
-        model="claude-opus-4-6",
+    client = OpenAI(
+        base_url="https://models.inference.ai.azure.com",
+        api_key=os.environ["GITHUB_TOKEN"],
+    )
+    message = client.chat.completions.create(
+        model="gpt-4o",
         max_tokens=8192,
         messages=[{"role": "user", "content": prompt}],
     )
 
-    text = message.content[0].text.strip()
+    text = message.choices[0].message.content.strip()
     # Strip markdown code fences if present
     if text.startswith("```"):
         text = text.split("\n", 1)[1]

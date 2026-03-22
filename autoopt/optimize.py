@@ -45,11 +45,15 @@ def validate_paths(changes: list[dict]) -> bool:
 # ── apply / revert ───────────────────────────────────────────────────────────
 
 def apply_changes(changes: list[dict], repo_root: Path = REPO_ROOT) -> None:
-    """Write each file change to disk."""
+    """Write each file change to disk. Raises SyntaxError if any .py file is invalid."""
+    import ast
     for change in changes:
+        content = change["content"]
+        if change["file"].endswith(".py"):
+            ast.parse(content)  # raises SyntaxError before touching disk
         target = repo_root / change["file"]
         target.parent.mkdir(parents=True, exist_ok=True)
-        target.write_text(change["content"])
+        target.write_text(content)
 
 
 def revert_changes(repo_root: Path = REPO_ROOT) -> None:

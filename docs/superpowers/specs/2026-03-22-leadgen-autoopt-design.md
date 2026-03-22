@@ -89,9 +89,12 @@ jobs:
           GOOGLE_SHEET_ID: ${{ secrets.GOOGLE_SHEET_ID }}
           GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
           APIFY_API_KEY: ${{ secrets.APIFY_API_KEY }}
+      # optimize.py handles its own git commit+push for code improvements.
+      # This step only catches results.tsv if optimize.py exited before committing it
+      # (e.g. on an unhandled exception). optimize.py is the single owner of all commits.
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: 'autoopt: update results.tsv'
+          commit_message: 'autoopt: update results.tsv (fallback)'
 ```
 
 ### 4. `results.tsv`
@@ -160,7 +163,8 @@ append results.tsv ──► git push
 
 ## Constraints & Safety
 
-- **Scope**: Claude may only modify files under `leadgen/` (not `autoopt/`, `.github/`, `results.tsv`)
+- **Scope**: Claude may only modify files under `leadgen/` (not `autoopt/`, `.github/`, `results.tsv`). `optimize.py` must validate all returned file paths are under `leadgen/` before writing — do not rely on the prompt alone to enforce this.
+- **Auth boundary**: Claude must not touch API key loading or credential files (e.g. `config.py` env reads, `.env` handling, `service_account.json`)
 - **Crash guard**: if benchmark crashes (exception or zero leads returned), always revert — never commit a broken state
 - **Improvement threshold**: require ≥1% improvement to commit (avoids noisy micro-commits)
 - **GitHub Actions minutes**: public repo = unlimited free minutes (secrets remain in GitHub Secrets, never in code)

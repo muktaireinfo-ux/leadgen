@@ -10,6 +10,7 @@ Each run:
 """
 
 import json
+import os
 import subprocess
 from datetime import datetime, timezone
 from pathlib import Path
@@ -30,10 +31,13 @@ def validate_paths(changes: list[dict]) -> bool:
     """Return True only if every file path in changes is under leadgen/."""
     for change in changes:
         path = Path(change["file"])
+        if len(path.parts) < 2:
+            return False
         if not path.parts or path.parts[0] != "leadgen":
             return False
         resolved = (REPO_ROOT / path).resolve()
-        if not str(resolved).startswith(str(LEADGEN_DIR.resolve())):
+        leadgen_root = str(LEADGEN_DIR.resolve()) + os.sep
+        if not str(resolved).startswith(leadgen_root):
             return False
     return True
 
@@ -73,7 +77,7 @@ def append_results(
         tsv.write_text(RESULTS_HEADER)
 
     timestamp = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-    new_str = f"{new_metric:.3f}" if new_metric is not None else "crash"
+    new_str = f"{new_metric:.3f}" if new_metric is not None else "N/A"
     if new_metric is not None:
         delta = f"{(new_metric - baseline) / baseline * 100:+.1f}%"
     else:

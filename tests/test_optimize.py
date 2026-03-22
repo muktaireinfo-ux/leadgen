@@ -25,6 +25,11 @@ def test_validate_paths_rejects_github_workflows():
     assert validate_paths([{"file": ".github/workflows/optimize.yml", "content": "x"}]) is False
 
 
+def test_validate_paths_rejects_bare_directory():
+    from autoopt.optimize import validate_paths
+    assert validate_paths([{"file": "leadgen", "content": "x"}]) is False
+
+
 # ── apply + revert ───────────────────────────────────────────────────────────
 
 @pytest.fixture
@@ -84,3 +89,6 @@ def test_append_results_handles_crash(tmp_path):
     lines = (tmp_path / "results.tsv").read_text().splitlines()
     assert "revert" in lines[1]
     assert "N/A" in lines[1]
+    cols = lines[1].split('\t')
+    assert cols[3] == "N/A"   # new_s_per_lead column
+    assert cols[4] == "N/A"   # delta_pct column

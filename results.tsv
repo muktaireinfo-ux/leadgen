@@ -11,3 +11,4 @@ timestamp	commit	baseline_s_per_lead	new_s_per_lead	delta_pct	status	description
 2026-03-22T09:03:49Z	5401b5e	2.870	N/A	N/A	skip	Claude error: Expecting ',' delimiter: line 1 column 49 (char 48)
 2026-03-22T13:56:11Z	b4f83fc	3.669	N/A	N/A	skip	syntax error: expected an indented block after function definition on line 51 (<unknown>, line 52)
 2026-03-22T14:57:35Z	69bb75d	4.221	N/A	N/A	skip	Claude error: Expecting ',' delimiter: line 1 column 49 (char 48)
+2026-03-22T15:52:02Z	44fe184	7.626	N/A	N/A	skip	Claude error: Invalid \escape: line 1 column 121 (char 120)

@@ -152,6 +152,7 @@ Current source files:
 # ── git helpers ──────────────────────────────────────────────────────────────
 
 def get_short_commit(repo_root: Path = REPO_ROOT) -> str:
+    """Return the short (7-char) SHA of the current HEAD commit."""
     result = subprocess.run(
         ["git", "rev-parse", "--short", "HEAD"],
         cwd=repo_root, capture_output=True, text=True, check=True,
@@ -175,6 +176,15 @@ def commit_and_push(
 def push_results_only(repo_root: Path = REPO_ROOT) -> None:
     """Commit and push results.tsv alone (revert runs)."""
     subprocess.run(["git", "add", "results.tsv"], cwd=repo_root, check=True)
+    # Check if there's actually something to commit (avoids CalledProcessError)
+    result = subprocess.run(
+        ["git", "diff", "--cached", "--quiet"],
+        cwd=repo_root,
+    )
+    if result.returncode == 0:
+        # Nothing staged — results.tsv already committed or unchanged
+        subprocess.run(["git", "push"], cwd=repo_root, check=True)
+        return
     subprocess.run(
         ["git", "commit", "-m", "autoopt: log experiment (no improvement)"],
         cwd=repo_root, check=True,
@@ -207,8 +217,18 @@ def main() -> None:
         changes = call_claude(baseline, source_files)
     except Exception as e:
         print(f"Claude call failed: {e}")
+        commit = get_short_commit()
+        append_results(REPO_ROOT, commit, baseline, None, "skip", f"Claude error: {e}")
+        push_results_only()
         return
     print(f"      Claude suggested changes to: {[c['file'] for c in changes]}")
+
+    if not changes:
+        print("Claude returned no changes. Skipping.")
+        commit = get_short_commit()
+        append_results(REPO_ROOT, commit, baseline, None, "skip", "Claude returned empty changes")
+        push_results_only()
+        return
 
     # 3. Validate paths
     print("\n[3/5] Validating file paths...")

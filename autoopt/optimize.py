@@ -44,13 +44,48 @@ def validate_paths(changes: list[dict]) -> bool:
 
 # ── apply / revert ───────────────────────────────────────────────────────────
 
+# Public names that must be present in each file — LLMs sometimes emit placeholder
+# comments ("# ... rest of code") instead of full content, silently deleting functions.
+_REQUIRED_NAMES: dict[str, list[str]] = {
+    "leadgen/pipeline.py":              ["run"],
+    "leadgen/writer.py":                ["SheetsWriter"],
+    "leadgen/utils.py":                 ["retry_with_backoff"],
+    "leadgen/classifier.py":            ["classify"],
+    "leadgen/enrichers/website.py":     ["enrich"],
+    "leadgen/enrichers/google_search.py": ["enrich_via_search"],
+}
+
+
+def _check_required_names(file: str, content: str) -> None:
+    """Raise ValueError if any required top-level name is missing from content."""
+    import ast
+    required = _REQUIRED_NAMES.get(file)
+    if not required:
+        return
+    tree = ast.parse(content)
+    defined = {
+        node.name
+        for node in ast.walk(tree)
+        if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef))
+        and isinstance(getattr(node, "col_offset", 1), int)
+        and node.col_offset == 0  # top-level only
+    }
+    missing = [name for name in required if name not in defined]
+    if missing:
+        raise ValueError(
+            f"{file} is missing required top-level names: {missing}. "
+            "LLM likely used placeholder comments instead of full file content."
+        )
+
+
 def apply_changes(changes: list[dict], repo_root: Path = REPO_ROOT) -> None:
-    """Write each file change to disk. Raises SyntaxError if any .py file is invalid."""
+    """Write each file change to disk. Raises SyntaxError or ValueError if invalid."""
     import ast
     for change in changes:
         content = change["content"]
         if change["file"].endswith(".py"):
-            ast.parse(content)  # raises SyntaxError before touching disk
+            ast.parse(content)              # raises SyntaxError before touching disk
+            _check_required_names(change["file"], content)  # raises ValueError if names missing
         target = repo_root / change["file"]
         target.parent.mkdir(parents=True, exist_ok=True)
         target.write_text(content)
@@ -293,10 +328,10 @@ def main() -> None:
     print("\n[4/5] Applying changes and re-benchmarking...")
     try:
         apply_changes(changes)
-    except SyntaxError as e:
-        print(f"LLM change has invalid Python syntax: {e}. Skipping.")
+    except (SyntaxError, ValueError) as e:
+        print(f"LLM change rejected: {e}. Skipping.")
         commit = get_short_commit()
-        append_results(REPO_ROOT, commit, baseline, None, "skip", f"syntax error: {e}")
+        append_results(REPO_ROOT, commit, baseline, None, "skip", f"invalid change: {e}")
         push_results_only()
         return
     try:

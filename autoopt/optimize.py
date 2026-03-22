@@ -166,14 +166,14 @@ Current source files:
         text = text.rsplit("```", 1)[0]
 
     start = text.find("[")
-    end = text.rfind("]") + 1
-    raw = text[start:end]
+    if start == -1:
+        raise ValueError("No JSON array found in LLM response")
 
-    # LLMs sometimes emit literal control characters inside JSON strings
-    # (e.g. real newlines instead of \n). Fix them with a lightweight
-    # state-machine that only escapes chars that are inside string values.
-    fixed = _fix_json_control_chars(raw)
-    return json.loads(fixed)
+    # LLMs sometimes emit literal control characters inside JSON strings.
+    # Fix them before parsing, then use raw_decode so trailing text is ignored.
+    fixed = _fix_json_control_chars(text)
+    result, _ = json.JSONDecoder().raw_decode(fixed, start)
+    return result
 
 
 def _fix_json_control_chars(s: str) -> str:

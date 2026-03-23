@@ -21,3 +21,4 @@ timestamp	commit	baseline_s_per_lead	new_s_per_lead	delta_pct	status	description
 2026-03-23T05:48:17Z	bc5d219	9.828	N/A	N/A	skip	Claude error: Expecting ',' delimiter: line 1 column 49 (char 48)
 2026-03-23T08:39:01Z	0bc141a	10.344	N/A	N/A	skip	invalid change: unterminated string literal (detected at line 33) (<unknown>, line 33)
 2026-03-23T11:34:10Z	daaaedf	4.146	N/A	N/A	skip	Claude error: Expecting ',' delimiter: line 1 column 47 (char 46)
+2026-03-23T15:41:00Z	0e13452	4.122	2.537	-38.5%	keep	changed ['leadgen/pipeline.py']
